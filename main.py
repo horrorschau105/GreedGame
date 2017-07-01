@@ -35,6 +35,6 @@ if __name__ == "__main__":
 	g = Grid(20,80)
 	g.display()
 	while(True):
-		button = sys.stdin.read(1)
-		if(button == 'q'): break
+		#button = sys.stdin.read(1)
+		#if(button == 'q'): break
 		
