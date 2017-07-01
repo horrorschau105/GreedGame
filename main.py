@@ -15,24 +15,22 @@ class Grid:
 	def __init__(self, h, w):
 		self.height = h
 		self.width = w
-		self.grid = [[Square(randint(1,5)) for i in range(w) ] for j in range(h)]
-		self.max = sum([sum([self.grid[i][j].value for i in range(w)]) for j in range(h)])
-		self.position = [randint(0, w-1), randint(0, h-1)]
+		self.grid = [[Square(randint(1,5)) for j in range(w) ] for i in range(h)]
+		self.max = sum([sum([self.grid[i][j].value for j in range(w)]) for i in range(h)])
+		self.position = [randint(0, h-1), randint(0, w-1)]
 		#self.grid[self.position[0]][self.position[1]].visited = True
 		self.result = self.grid[self.position[0]][self.position[1]].value
 	def display(self):
-		for i in range(self.width): # gonna be shorter
-			for j in range(self.height):
+		for i in range(self.height): # gonna be shorter
+			for j in range(self.width):
 				if self.grid[i][j].visited: print(' ', end="")
 				elif [i,j] == self.position: print('@', end="")
 				else: print (self.grid[i][j].value, end="")
 			print ('\n', end="")
 		print()
 		print(self.result, " / " , self.max)
+		print(self.position)
 if __name__ == "__main__":
 	
-	g = Grid(4,4)
+	g = Grid(20,40)
 	g.display()
-	#print (g.grid)
-	#g.kupa()
-	#print (g.map)
