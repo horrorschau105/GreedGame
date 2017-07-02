@@ -1,6 +1,7 @@
 from random import randint
 from colors import printc
 from getch import getch
+from os import system
 
 class Square:
 	visited = False
@@ -27,15 +28,16 @@ class Grid:
 		self.grid[self.position[0]][self.position[1]].visited = True
 	### display
 	def display(self):
+		system('clear')
 		for i in range(self.height): # gonna be shorter
 			for j in range(self.width):
-				if [i,j] == self.position: print('@', end="")
+				if [i,j] == self.position: print('+' if self.end else '#', end="")
 				elif self.grid[i][j].visited: print(' ', end="")
 				else: printc(self.grid[i][j].value)
 			print ('\n', end="")
 		print()
-		print("Result: {} / {},\t {:06.4f}% \t {} \t {} \t {}".format(self.result, 
-			self.max, self.result/self.max, self.position, "Invalid move" if self.invalid else "", "Game Over!" if self.end else ""))
+		print("Result: {} / {},\t {:04.2f}% \t {} \t {} \t {}".format(self.result, 
+			self.max, 100*self.result/self.max, self.position, "Invalid move" if self.invalid else "", "Game Over!" if self.end else ""))
 	def gameOver(self):
 		self.end = True
 		self.display()
@@ -89,14 +91,14 @@ class Grid:
 		step = self.grid[self.position[0]][self.position[1] - 1].value
 		if self.position[1] - step < 0:
 			return False
-		return not any([self.grid[self.position[0]][self.position[1] - 1].visited for i in range(1, step + 1)])
+		return not any([self.grid[self.position[0]][self.position[1] - i].visited for i in range(1, step + 1)])
 	def chkRight(self):
 		if self.position[1] == self.width - 1:
 			return False
 		step = self.grid[self.position[0]][self.position[1] + 1].value
 		if self.position[1] + step > self.width - 1:
 			return False
-		return not any([self.grid[self.position[0]][self.position[1] + 1].visited for i in range(1, step + 1)])
+		return not any([self.grid[self.position[0]][self.position[1] + i].visited for i in range(1, step + 1)])
 
 if __name__ == "__main__":
 	g = Grid(20,80)
