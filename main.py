@@ -6,9 +6,9 @@ if __name__ == "__main__":
 	g = Grid(20,80)
 	g.display()
 	while(True):
-		chkmove = [g.chkUp(), g.chkDown(), g.chkRight(), g.chkLeft()]
-		if not any(chkmove): 
+		if not any(g.chkmove): 
 			g.gameOver()
+			getch()
 			sc.update(g.result, g.max)
 			print("Press any key...")
 			getch()
@@ -19,8 +19,8 @@ if __name__ == "__main__":
 			button = ord(getch())
 			if button == 91:
 				button = ord(getch())-65
-				g.invalid = not chkmove[button] #flag for info about moves
-				if chkmove[button]: 
+				g.invalid = not g.chkmove[button] #flag for info about moves
+				if g.chkmove[button]: 
 					g.move(button)
 		g.display()
 

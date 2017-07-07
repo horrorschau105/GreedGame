@@ -1,6 +1,6 @@
 from os import system
 from random import randint
-from colors import printc
+from colors import color, gameOverText, possibleMovesText
 class Square:
 	visited = False
 	value = -1
@@ -12,9 +12,12 @@ class Grid:
 	width = 0
 	position = [-1,-1]
 	result = 0
+	chkmove = []
 	max = 0
 	end = False
 	invalid = False
+	def chkmoves(self):
+		self.chkmove = [self.chkUp(), self.chkDown(), self.chkRight(), self.chkLeft()]
 	def __init__(self, h, w):
 		self.height = h
 		self.width = w
@@ -25,16 +28,17 @@ class Grid:
 		self.grid[self.position[0]][self.position[1]].visited = True
 	### display
 	def display(self):
+		self.chkmoves()
 		system('clear')
 		for i in range(self.height): # gonna be shorter
 			for j in range(self.width):
 				if [i,j] == self.position: print('+' if self.end else '#', end="")
 				elif self.grid[i][j].visited: print(' ', end="")
-				else: printc(self.grid[i][j].value)
-			print ('\n', end="")
-		print()
-		print("Result: {} / {},\t {:04.2f}% \t {} \t {} \t {}".format(self.result, 
-			self.max, 100*self.result/self.max, self.position, "Invalid move" if self.invalid else "", "Game Over!" if self.end else ""))
+				else: print(color(self.grid[i][j].value), end="")
+			print ()
+		print(possibleMovesText(self.chkmove))
+		print("Result: {} / {},\t {:04.2f}% \tWhere: {} \t {} \t {}".format(self.result, self.max, 100*self.result/self.max, self.position, "Invalid move" if self.invalid else "", gameOverText() if self.end else ""))
+		
 	def gameOver(self):
 		self.end = True
 		self.display()

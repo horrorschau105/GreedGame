@@ -11,6 +11,17 @@ colors = {
 	"END" : '\x1b[0m'
 }
 
-def printc(col):
-	print(colors[col]+str(col)+ colors["END"], end="")
+moves = ["  Go up  " , "  Go down ", "Go right ", " Go left "]
+empty = ["         " , "          ", "         ", "         "] # sorry for that
+	
+def color(col, txt=None):
+	if txt is None: txt = col
+	return colors[col]+str(txt)+ colors["END"]
+	
+def gameOverText():
+	return color(2, "GAME OVER!")
+	
+def possibleMovesText(arr):
+	return color(8 ,"Possible moves:\t") + "".join([color(i+2, moves[i]) if arr[i] else color(1,empty[i]) for i in range(4)])
+	
 	
