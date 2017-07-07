@@ -15,10 +15,10 @@ class Grid:
 	max = 0
 	end = False
 	invalid = False
-	def __init__(self, h, w):
+	def __init__(self, h, w, val=9):
 		self.height = h
 		self.width = w
-		self.grid = [[Square(randint(1,9)) for j in range(w) ] for i in range(h)]
+		self.grid = [[Square(randint(1,val)) for j in range(w) ] for i in range(h)]
 		self.max = sum([sum([self.grid[i][j].value for j in range(w)]) for i in range(h)])
 		self.position = [randint(0, h-1), randint(0, w-1)]
 		self.result = self.grid[self.position[0]][self.position[1]].value
@@ -35,6 +35,16 @@ class Grid:
 		print()
 		print("Result: {} / {},\t {:04.2f}% \t {} \t {} \t {}".format(self.result, 
 			self.max, 100*self.result/self.max, self.position, "Invalid move" if self.invalid else "", "Game Over!" if self.end else ""))
+	def importFrom(self, path):
+		pass
+	def show(self):
+		print (self.height, self.width, self.position[0], self.position[1])
+		for i in range(self.height): # gonna be shorter
+			for j in range(self.width):
+				print(self.grid[i][j].value, end="")
+			print()
+		
+		pass
 	def gameOver(self):
 		self.end = True
 		self.display()
