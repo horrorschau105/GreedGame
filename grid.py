@@ -1,6 +1,5 @@
 from os import system
 from random import randint
-from colors import printc
 class Square:
 	visited = False
 	value = -1
@@ -23,30 +22,16 @@ class Grid:
 		self.position = [randint(0, h-1), randint(0, w-1)]
 		self.result = self.grid[self.position[0]][self.position[1]].value
 		self.grid[self.position[0]][self.position[1]].visited = True
-	### display
-	def display(self):
-		system('clear')
-		for i in range(self.height): # gonna be shorter
-			for j in range(self.width):
-				if [i,j] == self.position: print('+' if self.end else '#', end="")
-				elif self.grid[i][j].visited: print(' ', end="")
-				else: printc(self.grid[i][j].value)
-			print ('\n', end="")
-		print()
-		print("Result: {} / {},\t {:04.2f}% \t {} \t {} \t {}".format(self.result, 
-			self.max, 100*self.result/self.max, self.position, "Invalid move" if self.invalid else "", "Game Over!" if self.end else ""))
+
 	def importFrom(self, height, width, position, values):
 		self.height, self.width, self.position = height, width, position
 		self.grid = [[Square(values[i][j]) for j in range(self.width) ] for i in range(self.height)]
 		self.result = self.grid[self.position[0]][self.position[1]].value
 		self.grid[self.position[0]][self.position[1]].visited = True
 		self.max = sum([sum([self.grid[i][j].value for j in range(self.width)]) for i in range(self.height)])
-		
-		pass
+
 	def gameOver(self):
 		self.end = True
-		
-		
 	### moves
 	def moveUp(self):
 		step = self.grid[self.position[0] - 1][self.position[1]].value
@@ -110,6 +95,7 @@ class Grid:
 		return [self.chkUp(), self.chkDown(), self.chkRight(), self.chkLeft()]
 		
 		## for ai methods
+		# give more data
 	def data(self):
-		return [self.chkMove()]
+		return [self.chkMove(), self.position, self.result]
 			

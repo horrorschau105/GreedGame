@@ -1,10 +1,12 @@
 from grid import Grid
 def parseGridsFrom(path):
 	with open(path, 'r') as f:
-		data = f.readlines()[1:]
+		data = f.readlines()
+		cnt = int(data[0])
+	data = data[1:]
 	grids = []
 	i=0
-	while(i < len(data)):
+	while(i < len(data) and len(grids) < cnt):
 		height, width, x, y = [int(k) for k in data[i][:-1].split(' ')]
 		position = [x,y]
 		i+=1
