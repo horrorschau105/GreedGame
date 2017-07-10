@@ -1,24 +1,15 @@
-from grid import Grid
+from ai import *
+from gridImport import parseGridsFrom
+from testyourai import TestYourAI
 import sys
 if __name__ == "__main__":
-	#data = []
-	with open('grids.txt', 'r') as f:
-		data = f.readlines()[1:]
-	grids = []
-	i=0
-	while(i < len(data)):
-		print(data[i][:-1])
-		height, width, x, y = [int(k) for k in data[i][:-1].split(' ')]
-		position = [x,y]
-		print (height, width, position)
-		i+=1
-		values = []
-		for j in range(height):
-			values.append([int(k) for k in data[i+j][:-1]])
-		i+=height
-		g = Grid(2,2)
-		g.importFrom(height, width, position, values)
-		grids.append(g)
+	machine = TestYourAI(parseGridsFrom('grids.txt'))
+	methods = [random] # put here whatever you want
+	for i in methods:
+		machine.testWith(i)
+		print("Finished: {}".format(i.__name__))
+	machine.printResults()
+
 	#workplan:
 	#
 	#import all grids

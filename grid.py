@@ -42,17 +42,11 @@ class Grid:
 		self.grid[self.position[0]][self.position[1]].visited = True
 		self.max = sum([sum([self.grid[i][j].value for j in range(self.width)]) for i in range(self.height)])
 		
-	def show(self):
-		print (self.height, self.width, self.position[0], self.position[1])
-		for i in range(self.height): # gonna be shorter
-			for j in range(self.width):
-				print(self.grid[i][j].value, end="")
-			print()
-		
 		pass
 	def gameOver(self):
 		self.end = True
-		self.display()
+		
+		
 	### moves
 	def moveUp(self):
 		step = self.grid[self.position[0] - 1][self.position[1]].value
@@ -82,6 +76,7 @@ class Grid:
 	def move(self, num):
 		moves = [self.moveUp, self.moveDown, self.moveRight, self.moveLeft]
 		moves[num]()
+		
 	### moves check
 	def chkUp(self):
 		if self.position[0] == 0: 
@@ -111,3 +106,10 @@ class Grid:
 		if self.position[1] + step > self.width - 1:
 			return False
 		return not any([self.grid[self.position[0]][self.position[1] + i].visited for i in range(1, step + 1)])
+	def chkMove(self):
+		return [self.chkUp(), self.chkDown(), self.chkRight(), self.chkLeft()]
+		
+		## for ai methods
+	def data(self):
+		return [self.chkMove()]
+			
