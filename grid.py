@@ -35,8 +35,13 @@ class Grid:
 		print()
 		print("Result: {} / {},\t {:04.2f}% \t {} \t {} \t {}".format(self.result, 
 			self.max, 100*self.result/self.max, self.position, "Invalid move" if self.invalid else "", "Game Over!" if self.end else ""))
-	def importFrom(self, path):
-		pass
+	def importFrom(self, height, width, position, values):
+		self.height, self.width, self.position = height, width, position
+		self.grid = [[Square(values[i][j]) for j in range(self.width) ] for i in range(self.height)]
+		self.result = self.grid[self.position[0]][self.position[1]].value
+		self.grid[self.position[0]][self.position[1]].visited = True
+		self.max = sum([sum([self.grid[i][j].value for j in range(self.width)]) for i in range(self.height)])
+		
 	def show(self):
 		print (self.height, self.width, self.position[0], self.position[1])
 		for i in range(self.height): # gonna be shorter

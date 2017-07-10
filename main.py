@@ -1,6 +1,24 @@
 from grid import Grid
 import sys
 if __name__ == "__main__":
+	#data = []
+	with open('grids.txt', 'r') as f:
+		data = f.readlines()[1:]
+	grids = []
+	i=0
+	while(i < len(data)):
+		print(data[i][:-1])
+		height, width, x, y = [int(k) for k in data[i][:-1].split(' ')]
+		position = [x,y]
+		print (height, width, position)
+		i+=1
+		values = []
+		for j in range(height):
+			values.append([int(k) for k in data[i+j][:-1]])
+		i+=height
+		g = Grid(2,2)
+		g.importFrom(height, width, position, values)
+		grids.append(g)
 	#workplan:
 	#
 	#import all grids
@@ -13,11 +31,4 @@ if __name__ == "__main__":
 		#tbd
 	#run methods
 	#print results
-	if(len(sys.argv) != 5):
-		print("Usage: python3 main.py (count of grids) (width) (height) (max value in simgle cell) > (output file)")
-		sys.exit()
-	count, width, height, maxvalue = [int(i) for i in sys.argv[1:]]
-	for i in range(count):
-		g = Grid(height, width, maxvalue)
-		g.show()
 
