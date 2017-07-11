@@ -32,6 +32,7 @@ class Grid:
 
 	def gameOver(self):
 		self.end = True
+		
 	### moves
 	def moveUp(self):
 		step = self.grid[self.position[0] - 1][self.position[1]].value
@@ -45,19 +46,36 @@ class Grid:
 			self.grid[self.position[0] + i][self.position[1]].visited = True
 			self.result += self.grid[self.position[0] + i][self.position[1]].value 
 		self.position[0] += step
-	def moveLeft(self):
-		step = self.grid[self.position[0]][self.position[1] - 1].value
-		for i in range(1, step + 1):
-			self.grid[self.position[0]][self.position[1] - i].visited = True
-			self.result += self.grid[self.position[0]][self.position[1] - i].value
-		self.position[1] -= step
 	def moveRight(self):
 		step = self.grid[self.position[0]][self.position[1] + 1].value
 		for i in range(1, step + 1):
 			self.grid[self.position[0]][self.position[1] + i].visited = True
 			self.result += self.grid[self.position[0]][self.position[1] + i].value
 		self.position[1] += step
-
+	def moveLeft(self):
+		step = self.grid[self.position[0]][self.position[1] - 1].value
+		for i in range(1, step + 1):
+			self.grid[self.position[0]][self.position[1] - i].visited = True
+			self.result += self.grid[self.position[0]][self.position[1] - i].value
+		self.position[1] -= step
+	
+		
+	def potScore(self,possible):
+		up, down, left, right = -1, -1, -1, -1
+		if possible[0]: 
+			step = self.grid[self.position[0] - 1][self.position[1]].value
+			up = sum([self.grid[self.position[0] - i][self.position[1]].value for i in range(1,step+1)])
+		if possible[1]: 
+			step = self.grid[self.position[0] + 1][self.position[1]].value
+			down = sum([self.grid[self.position[0] - i][self.position[1]].value for i in range(1,step+1)])
+		if possible[2]:
+			step = self.grid[self.position[0]][self.position[1] + 1].value
+			right = sum([self.grid[self.position[0]][self.position[1] + i].value for i in range(1,step+1)])
+		if possible[3]:
+			step = self.grid[self.position[0]][self.position[1] - 1].value
+			left = sum([self.grid[self.position[0]][self.position[1] - i].value for i in range(1,step+1)])
+		
+		return [up, down, right, left ]
 	def move(self, num):
 		moves = [self.moveUp, self.moveDown, self.moveRight, self.moveLeft]
 		moves[num]()
@@ -77,13 +95,6 @@ class Grid:
 		if self.position[0] + step > self.height - 1:
 			return False
 		return not any([self.grid[self.position[0] + i][self.position[1]].visited for i in range(1, step + 1)])
-	def chkLeft(self):
-		if self.position[1] == 0:
-			return False
-		step = self.grid[self.position[0]][self.position[1] - 1].value
-		if self.position[1] - step < 0:
-			return False
-		return not any([self.grid[self.position[0]][self.position[1] - i].visited for i in range(1, step + 1)])
 	def chkRight(self):
 		if self.position[1] == self.width - 1:
 			return False
@@ -91,11 +102,19 @@ class Grid:
 		if self.position[1] + step > self.width - 1:
 			return False
 		return not any([self.grid[self.position[0]][self.position[1] + i].visited for i in range(1, step + 1)])
+	def chkLeft(self):
+		if self.position[1] == 0:
+			return False
+		step = self.grid[self.position[0]][self.position[1] - 1].value
+		if self.position[1] - step < 0:
+			return False
+		return not any([self.grid[self.position[0]][self.position[1] - i].visited for i in range(1, step + 1)])
+	
 	def chkMove(self):
 		return [self.chkUp(), self.chkDown(), self.chkRight(), self.chkLeft()]
 		
 		## for ai methods
 		# give more data
 	def data(self):
-		return [self.chkMove(), self.position, self.result]
+		return [self.chkMove(), self.position, self.result, self.potScore(self.chkMove())]
 			
