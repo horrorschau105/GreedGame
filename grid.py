@@ -116,5 +116,5 @@ class Grid:
 		## for ai methods
 		# give more data
 	def data(self):
-		return [self.chkMove(), self.position, self.result, self.potScore(self.chkMove())]
-			
+		return [self.chkMove(), self.position, 100*self.result / self.max, self.potScore(self.chkMove())]
+	# 		
