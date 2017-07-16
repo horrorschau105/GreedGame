@@ -4,13 +4,13 @@
 
 ### Interface
 
-After every move, you get the info about:
-+ possible direction of move
-+ your move
+After every move, you get whole object __grid__. It contains info about:
++ whole grid
++ possible moves
 + your current result (in %)
 + potential score after each possible move
-
-In **grid.py** method _data_ returns all needed data 
++ and so on
+You can watch it in **grid.py**.
 
 Then, you are to return one of 4 values - 0, 1, 2 or 3, meaning following directions: up, down, right left
 If you try to do an invalid move, a play on this grid will end, and next grid will be tested.

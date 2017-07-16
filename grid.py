@@ -60,7 +60,8 @@ class Grid:
 		self.position[1] -= step
 	
 		
-	def potScore(self,possible):
+	def potScore(self):
+		possible = self.chkMove()
 		up, down, left, right = -1, -1, -1, -1
 		if possible[0]: 
 			step = self.grid[self.position[0] - 1][self.position[1]].value
@@ -75,7 +76,7 @@ class Grid:
 			step = self.grid[self.position[0]][self.position[1] - 1].value
 			left = sum([self.grid[self.position[0]][self.position[1] - i].value for i in range(1,step+1)])
 		
-		return [up, down, right, left ]
+		return [up, down, right, left]
 	def move(self, num):
 		moves = [self.moveUp, self.moveDown, self.moveRight, self.moveLeft]
 		moves[num]()
@@ -113,8 +114,3 @@ class Grid:
 	def chkMove(self):
 		return [self.chkUp(), self.chkDown(), self.chkRight(), self.chkLeft()]
 		
-		## for ai methods
-		# give more data
-	def data(self):
-		return [self.chkMove(), self.position, 100*self.result / self.max, self.potScore(self.chkMove())]
-	# 		

@@ -1,14 +1,21 @@
 from grid import Grid
 from random import randint
+from copy import deepcopy
 #here you can put any ai method with additional classes 
-def random(data):
+def random(grid):
+	data = [[], []]
+	data[0] = grid.chkMove() #temporal patch
 	choices = [i for i in range(len(data[0])) if data[0][i]]
 	return choices[randint(0,len(choices)-1)]
-def greed(data):
+def greed(grid):
+	data = [[], [], [], []]
+	data[3] = grid.potScore()
 	best = max(data[3])
 	for i in range(len(data[3])):
 		if data[3][i] == best: return i
-def first(data):
+def first(grid):
+	data = [[], []]
+	data[0] = grid.chkMove()
 	choices = [i for i in range(len(data[0])) if data[0][i]]
 	return choices[0]
 
@@ -29,28 +36,27 @@ class snail:
 		if grid.position[0] > grid.height/2 and grid.position[1] < grid.width/2:
 			snail.direction = 3
 			
-	def snail(data):
-		up, down, right, left = data[0]
+	def snail(grid):
+		up, down, right, left = grid.chkMove()
 		if snail.direction == 0:
 			if down: return 1
 			if right: return 2
 			snail.direction = 1
-			return first(data)
-		if snail.direction == 1:
+		elif snail.direction == 1:
 			if right: return 2
 			if up: return 0
 			snail.direction = 2
-			return first(data)
-		if snail.direction == 2:
+		elif snail.direction == 2:
 			if up: return 0
 			if left: return 3
 			snail.direction = 3
-			return first(data)
-		if snail.direction == 3:
+		elif snail.direction == 3:
 			if left: return 3
 			if down: return 1
 			snail.direction = 0
-		return first(data)
+		return greed(grid)
+		
+	
 #dfsNstep
 #
 #
