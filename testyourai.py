@@ -16,23 +16,24 @@ class TestYourAI:
 		minimum = min([i  for i in arr if i>0])
 		maximum = max(arr)
 		self.results.append([name, avg, minimum, maximum, sd, fails, avg_steps])
-	def testWith(self, method):
+	def testWith(self, method): # need to make a preprocessing in grid
 		results = []
 		grids = deepcopy(self.grids)
 		for grid in grids:
+			if method[0] != None: method[0](grid)
 			steps = 0
 			while(True):
 				steps +=1
 				possible = grid.chkMove()
 				if(not any(possible)): #gameover
 					break
-				idx = method(grid.data())
+				idx = method[1](grid.data())
 				if(not possible[idx]): #illegal move 
 					results.append([-1, -1]) #mark it
 					break
 				grid.move(idx)
 			results.append([grid.result*100 / grid.max, steps])
-		self.addToSummary(method.__name__, results)
+		self.addToSummary(method[1].__name__, results)
 	def printResults(self):
 		print("Name\tAvg(%)\tMin(%)\tMax(%)\tStDev\tFail\tAvgSteps")
 		#print(self.results)

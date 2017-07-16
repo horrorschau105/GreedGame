@@ -28,9 +28,9 @@ In **ai.py** there are some functions implementing simply tactics.
 There you can add yours.
 In **main.py** 
 ```python
-methods = [random, first, greed]
-```
-_methods_ contains all names of method to test. Put there everything you want to test
+methods = [[None, random], [None, first], [None, greed], [snail.preSnail, snail.snail]]
+	```
+_methods_ contains all names of method to test. If you want to do a preprocessing in coming grid, put your function instead of __None__
 
 ### Summary
 
@@ -45,4 +45,4 @@ Column **Fail** indicates how many times your bot tried to move incorrectly.
 
 #### Grids
 
-File **grids.txt** contains 100 generated grids. See **generator** branch for more info
+File **grids.txt** contains 500 generated grids. See **generator** branch for more info
