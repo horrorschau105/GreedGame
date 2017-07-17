@@ -10,6 +10,7 @@ def random(grid):
 def greed(grid):
 	data = [[], [], [], []]
 	data[3] = grid.potScore()
+	#print(data[3])
 	best = max(data[3])
 	for i in range(len(data[3])):
 		if data[3][i] == best: return i
@@ -101,6 +102,34 @@ class snail2:
 			snail2.direction = 0
 			snail2.mostleft = grid.position[0]
 		return greed(grid)
+
+def gr1stp(grid):
+	up, down, right, left = grid.chkMove()
+	potScore = [-1, -1, -1, -1]
+	if up:
+		grid.moveUp()
+		potScore[0] = grid.result
+		grid.undoUp()
+	if down: 
+		grid.moveDown()
+		potScore[1] = grid.result
+		grid.undoDown()
+	if right:
+		grid.moveRight()
+		potScore[2] = grid.result
+		grid.undoRight()
+	if left:
+		grid.moveLeft()
+		potScore[3] = grid.result
+		grid.undoLeft()
+	for i in range(len(potScore)):
+		if potScore[i]>0:
+			potScore[i] -= grid.result
+	#potScore = [i - grid.result for i in potScore if i > 0 else -1]
+	best = max(potScore)
+	#	print(potScore)
+	for i in range(len(potScore)):
+		if potScore[i] == best: return i
 #dfsNstep
 #
 #

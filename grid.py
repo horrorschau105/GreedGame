@@ -14,6 +14,7 @@ class Grid:
 	max = 0
 	end = False
 	invalid = False
+	steps = []
 	def __init__(self, h, w, val=9):
 		self.height = h
 		self.width = w
@@ -36,29 +37,64 @@ class Grid:
 	### moves
 	def moveUp(self):
 		step = self.grid[self.position[0] - 1][self.position[1]].value
+		self.steps.append(step)
 		for i in range(1, step + 1):
 			self.grid[self.position[0] - i][self.position[1]].visited = True
 			self.result += self.grid[self.position[0] - i][self.position[1]].value
 		self.position[0] -=	step
 	def moveDown(self):
 		step = self.grid[self.position[0] + 1][self.position[1]].value
+		self.steps.append(step)
 		for i in range(1, step + 1):
 			self.grid[self.position[0] + i][self.position[1]].visited = True
 			self.result += self.grid[self.position[0] + i][self.position[1]].value 
 		self.position[0] += step
 	def moveRight(self):
 		step = self.grid[self.position[0]][self.position[1] + 1].value
+		self.steps.append(step)
 		for i in range(1, step + 1):
 			self.grid[self.position[0]][self.position[1] + i].visited = True
 			self.result += self.grid[self.position[0]][self.position[1] + i].value
 		self.position[1] += step
 	def moveLeft(self):
 		step = self.grid[self.position[0]][self.position[1] - 1].value
+		self.steps.append(step)
 		for i in range(1, step + 1):
 			self.grid[self.position[0]][self.position[1] - i].visited = True
 			self.result += self.grid[self.position[0]][self.position[1] - i].value
 		self.position[1] -= step
 	
+	def undoUp(self):
+		step = self.steps[-1]
+		self.steps = self.steps[:-1]
+		for i in range(step):
+			self.grid[self.position[0] + i][self.position[1]].visited = False
+			self.result -= self.grid[self.position[0] + i][self.position[1]].value
+		self.position[0] +=	step
+		
+	def undoDown(self):
+		step = self.steps[-1]
+		self.steps = self.steps[:-1]
+		for i in range(step):
+			self.grid[self.position[0] - i][self.position[1]].visited = False
+			self.result -= self.grid[self.position[0] - i][self.position[1]].value 
+		self.position[0] -= step
+		
+	def undoRight(self):
+		step = self.steps[-1]
+		self.steps = self.steps[:-1]
+		for i in range(step):
+			self.grid[self.position[0]][self.position[1] - i].visited = False
+			self.result -= self.grid[self.position[0]][self.position[1] - i].value
+		self.position[1] -= step
+		
+	def undoLeft(self):
+		step = self.steps[-1]
+		self.steps = self.steps[:-1]
+		for i in range(step):
+			self.grid[self.position[0]][self.position[1] + i].visited = False
+			self.result -= self.grid[self.position[0]][self.position[1] + i].value
+		self.position[1] += step
 		
 	def potScore(self):
 		possible = self.chkMove()
@@ -68,7 +104,7 @@ class Grid:
 			up = sum([self.grid[self.position[0] - i][self.position[1]].value for i in range(1,step+1)])
 		if possible[1]: 
 			step = self.grid[self.position[0] + 1][self.position[1]].value
-			down = sum([self.grid[self.position[0] - i][self.position[1]].value for i in range(1,step+1)])
+			down = sum([self.grid[self.position[0] + i][self.position[1]].value for i in range(1,step+1)])
 		if possible[2]:
 			step = self.grid[self.position[0]][self.position[1] + 1].value
 			right = sum([self.grid[self.position[0]][self.position[1] + i].value for i in range(1,step+1)])
@@ -120,4 +156,6 @@ class Grid:
 		if self.chkRight(): right = self.grid[self.position[0]][self.position[1] + 1].value
 		if self.chkLeft(): left = self.grid[self.position[0]][self.position[1] - 1].value
 		return [up, down, right, left]
+		
+	
 		
