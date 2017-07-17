@@ -113,4 +113,11 @@ class Grid:
 	
 	def chkMove(self):
 		return [self.chkUp(), self.chkDown(), self.chkRight(), self.chkLeft()]
+	def potStep(step):
+		up, down, right, left = -1, -1, -1, -1
+		if self.chkUp(): up = self.grid[self.position[0] - 1][self.position[1]].value
+		if self.chkDown(): down = self.grid[self.position[0] + 1][self.position[1]].value
+		if self.chkRight(): right = self.grid[self.position[0]][self.position[1] + 1].value
+		if self.chkLeft(): left = self.grid[self.position[0]][self.position[1] - 1].value
+		return [up, down, right, left]
 		
