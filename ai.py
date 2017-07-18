@@ -3,23 +3,19 @@ from random import randint
 from copy import deepcopy
 #here you can put any ai method with additional classes 
 def random(grid):
-	data = [[], []]
+	data = [[]]
 	data[0] = grid.chkMove() #temporal patch
-	choices = [i for i in range(len(data[0])) if data[0][i]]
+	choices = [i for i, val in enumerate(data[0]) if val]
 	return choices[randint(0,len(choices)-1)]
 def greed(grid):
 	data = [[], [], [], []]
 	data[3] = grid.potScore()
-	#print(data[3])
 	best = max(data[3])
-	for i in range(len(data[3])):
-		if data[3][i] == best: return i
+	return [i for i, val in enumerate(data[3]) if val == best][0]
 def first(grid):
 	data = [[], []]
 	data[0] = grid.chkMove()
-	choices = [i for i in range(len(data[0])) if data[0][i]]
-	return choices[0]
-
+	return [i for i,val in enumerate(data[0]) if val][0]
 class snail:
 #         <- 2
 #      3 XXXXXX ^
@@ -122,14 +118,65 @@ def gr1stp(grid):
 		grid.moveLeft()
 		potScore[3] = grid.result
 		grid.undoLeft()
-	for i in range(len(potScore)):
+	for i, val in enumerate(potScore):
 		if potScore[i]>0:
 			potScore[i] -= grid.result
-	#potScore = [i - grid.result for i in potScore if i > 0 else -1]
 	best = max(potScore)
-	#	print(potScore)
-	for i in range(len(potScore)):
-		if potScore[i] == best: return i
-#dfsNstep
-#
-#
+	return [i for i, val in enumerate(potScore) if val == best][0]
+		
+class deepgreed:
+	deep = 1
+	steps = []
+	def preGreed(grid):
+		deepgreed.deep = 4
+	def deepgrd(grid):
+		if len(deepgreed.steps) == 0:
+			deepgreed.steps = deepgreed.bfsPath(grid, deepgreed.deep)
+		move =  deepgreed.steps[0]
+		deepgreed.steps = deepgreed.steps[1:] 
+	def bfsPath(grid, deep):
+		
+		"""up, down, right, left = -1,-1,-1,-1
+		bestmove = {}
+		if deep == 1: # classic greed
+			if grid.chkUp():
+				grid.moveUp()
+				up = grid.result
+				grid.undoUp()
+			if grid.chkDown():
+				grid.moveDown()
+				down = grid.result
+				grid.undoDown()
+			if grid.chkRight():
+				grid.moveRight()
+				right = grid.result
+				grid.undoRight()
+			if grid.chkLeft():
+				grid.moveLeft()
+				left = grid.result
+				grid.undoLeft()
+			mv = [up, down, right, left]
+			best = max(mv)
+			for i, val in enumerate(mv):
+				if val == best:
+					return {best+grid.result: [i]}
+		if deep > 1:  
+			if grid.chkUp():
+				grid.moveUp()
+				up = bfsPath(grid, deep - 1)
+				grid.undoUp()
+			if grid.chkDown():
+				grid.moveDown()
+				down = bfsPath(grid, deep - 1)
+				grid.undoDown()
+			if grid.chkRight():
+				grid.moveRight()
+				right = bfsPath(grid, deep - 1)
+				grid.undoRight()
+			if grid.chkLeft():
+				grid.moveLeft()
+				left = bfsPath(grid, deep - 1)
+				grid.undoLeft()
+			bestmove = {0: up, 1: down, 2: right, 3: left}
+		"""
+		
