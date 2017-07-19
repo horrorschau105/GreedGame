@@ -24,6 +24,8 @@ class Grid:
 		self.result = self.grid[self.position[0]][self.position[1]].value
 		self.grid[self.position[0]][self.position[1]].visited = True
 
+	def score(self): # result in percentage
+		return self.result* 100 / self.max
 	def importFrom(self, height, width, position, values):
 		self.height, self.width, self.position = height, width, position
 		self.grid = [[Square(values[i][j]) for j in range(self.width) ] for i in range(self.height)]

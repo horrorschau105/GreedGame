@@ -128,36 +128,46 @@ class deepgreed:
 	deep = 1
 	steps = []
 	def preGreed(grid):
-		deepgreed.deep = 1
+		deepgreed.deep = 6
 	def deepgrd(grid):
 		if len(deepgreed.steps) == 0:
 			deepgreed.steps = deepgreed.bfsPath(grid, deepgreed.deep)[0]
 		move = deepgreed.steps[0]
 		deepgreed.steps = deepgreed.steps[1:] 
+		score = grid.score()
+		if score > 25:
+			deepgreed.deep = 12
+		elif score > 20:
+			deepgreed.deep = 9
+		elif score > 13:
+			deepgreed.deep = 8
+		elif score > 8:
+			deepgreed.deep = 7
 		return move
 	def bfsPath(grid, deep):
 		if deep == 0:
 			return [[], grid.result]
 		else:
-			up, down, right, left = [[[],-1],[[],-1],[[],-1],[[],-1]]
+			up, down, right, left = [[[],0],[[],0],[[],0],[[],0]]
 			if grid.chkUp():
 				grid.moveUp()
 				up = deepgreed.bfsPath(grid, deep - 1)
+				up[0]    = [0] + up[0]
 				grid.undoUp()
 			if grid.chkDown():
 				grid.moveDown()
 				down = deepgreed.bfsPath(grid, deep - 1)
+				down[0]  = [1] + down[0]
 				grid.undoDown()
 			if grid.chkRight():
 				grid.moveRight()
 				right = deepgreed.bfsPath(grid, deep - 1)
+				right[0] = [2] + right[0]
 				grid.undoRight()
 			if grid.chkLeft():
 				grid.moveLeft()
 				left = deepgreed.bfsPath(grid, deep - 1)
+				left[0]  = [3] + left[0]
 				grid.undoLeft()
-			up[0] = [0] + up[0]
-			down[0] = [1] + down[0]
-			right[0] = [2] + right[0]
-			left[0] = [3] + left[0]
-			return [[mv, res + grid.result] for mv, res in [up, down, right, left] if res == max(tup[1] for tup in [up, down, right, left])][0]
+			#print ([up, down, right, left], grid.position)
+			return [[mv, res + grid.result] for mv, res in [up, down, right, left] if 	res == max([tup[1] for tup in [up, down, right	, left]])][0]
