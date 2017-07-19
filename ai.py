@@ -128,55 +128,36 @@ class deepgreed:
 	deep = 1
 	steps = []
 	def preGreed(grid):
-		deepgreed.deep = 4
+		deepgreed.deep = 1
 	def deepgrd(grid):
 		if len(deepgreed.steps) == 0:
-			deepgreed.steps = deepgreed.bfsPath(grid, deepgreed.deep)
-		move =  deepgreed.steps[0]
+			deepgreed.steps = deepgreed.bfsPath(grid, deepgreed.deep)[0]
+		move = deepgreed.steps[0]
 		deepgreed.steps = deepgreed.steps[1:] 
+		return move
 	def bfsPath(grid, deep):
-		
-		"""up, down, right, left = -1,-1,-1,-1
-		bestmove = {}
-		if deep == 1: # classic greed
+		if deep == 0:
+			return [[], grid.result]
+		else:
+			up, down, right, left = [[[],-1],[[],-1],[[],-1],[[],-1]]
 			if grid.chkUp():
 				grid.moveUp()
-				up = grid.result
+				up = deepgreed.bfsPath(grid, deep - 1)
 				grid.undoUp()
 			if grid.chkDown():
 				grid.moveDown()
-				down = grid.result
+				down = deepgreed.bfsPath(grid, deep - 1)
 				grid.undoDown()
 			if grid.chkRight():
 				grid.moveRight()
-				right = grid.result
+				right = deepgreed.bfsPath(grid, deep - 1)
 				grid.undoRight()
 			if grid.chkLeft():
 				grid.moveLeft()
-				left = grid.result
+				left = deepgreed.bfsPath(grid, deep - 1)
 				grid.undoLeft()
-			mv = [up, down, right, left]
-			best = max(mv)
-			for i, val in enumerate(mv):
-				if val == best:
-					return {best+grid.result: [i]}
-		if deep > 1:  
-			if grid.chkUp():
-				grid.moveUp()
-				up = bfsPath(grid, deep - 1)
-				grid.undoUp()
-			if grid.chkDown():
-				grid.moveDown()
-				down = bfsPath(grid, deep - 1)
-				grid.undoDown()
-			if grid.chkRight():
-				grid.moveRight()
-				right = bfsPath(grid, deep - 1)
-				grid.undoRight()
-			if grid.chkLeft():
-				grid.moveLeft()
-				left = bfsPath(grid, deep - 1)
-				grid.undoLeft()
-			bestmove = {0: up, 1: down, 2: right, 3: left}
-		"""
-		
+			up[0] = [0] + up[0]
+			down[0] = [1] + down[0]
+			right[0] = [2] + right[0]
+			left[0] = [3] + left[0]
+			return [[mv, res + grid.result] for mv, res in [up, down, right, left] if res == max(tup[1] for tup in [up, down, right, left])][0]
