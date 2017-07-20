@@ -24,8 +24,8 @@ python3 main.py
 for testing all methods declared in **ai.py**
 
 ### Create
-In **ai.py** there are some functions implementing simply tactics.
-There you can add yours.
+In **examples.py** there are some functions implementing simply tactics.
+In **ai.py** you can add yours.
 In **main.py** 
 ```python
 methods = [[None, random], [None, first], [None, greed], [snail.preSnail, snail.snail]]

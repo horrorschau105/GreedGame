@@ -1,148 +1,69 @@
 from grid import Grid
-from random import randint
-from copy import deepcopy
+from examples import first
 #here you can put any ai method with additional classes 
-def random(grid):
-	data = [[]]
-	data[0] = grid.chkMove() #temporal patch
-	choices = [i for i, val in enumerate(data[0]) if val]
-	return choices[randint(0,len(choices)-1)]
-def greed(grid):
-	data = [[], [], [], []]
-	data[3] = grid.potScore()
-	best = max(data[3])
-	return [i for i, val in enumerate(data[3]) if val == best][0]
-def first(grid):
-	data = [[], []]
-	data[0] = grid.chkMove()
-	return [i for i,val in enumerate(data[0]) if val][0]
-class snail:
-#         <- 2
-#      3 XXXXXX ^
-#      I XXXXXX I
-#      v XXXXXX 1
-#         -> 0
-	direction = 0
-	def preSnail(grid):
-		if grid.position[0] > grid.height/2 and grid.position[1] > grid.width/2:
-			snail.direction = 0
-		if grid.position[0] < grid.height/2 and grid.position[1] < grid.width/2:
-			snail.direction = 2
-		if grid.position[0] < grid.height/2 and grid.position[1] > grid.width/2:
-			snail.direction = 1
-		if grid.position[0] > grid.height/2 and grid.position[1] < grid.width/2:
-			snail.direction = 3
-			
-	def snail(grid):
-		up, down, right, left = grid.chkMove()
-		if snail.direction == 0:
-			if down: return 1
-			if right: return 2
-			snail.direction = 1
-		elif snail.direction == 1:
-			if right: return 2
-			if up: return 0
-			snail.direction = 2
-		elif snail.direction == 2:
-			if up: return 0
-			if left: return 3
-			snail.direction = 3
-		elif snail.direction == 3:
-			if left: return 3
-			if down: return 1
-			snail.direction = 0
-		return greed(grid)
-		
-class snail2:
+class goodsnail:
 #         <- 2
 #      3 XXXXXX ^
 #      I XXXXXX I
 #      v XXXXXX 1
 #         -> 0
 	direction, mostup, mostdown, mostright, mostleft = 0,0,0,0,0
-	def preSnail2(grid):
-		snail2.mostup, snail2.mostdown, snail2.mostright, snail2.mostleft = -1, grid.height+1, grid.width+1, -1
+	def setDirection(grid):
+		goodsnail.mostup, goodsnail.mostdown, goodsnail.mostright, goodsnail.mostleft = -1, grid.height+1, grid.width+1, -1
 		if grid.position[0] > grid.height/2 and grid.position[1] > grid.width/2:
-			snail2.direction = 0
+			goodsnail.direction = 0
 		if grid.position[0] < grid.height/2 and grid.position[1] < grid.width/2:
-			snail2.direction = 2
+			goodsnail.direction = 2
 		if grid.position[0] < grid.height/2 and grid.position[1] > grid.width/2:
-			snail2.direction = 1
+			goodsnail.direction = 1
 		if grid.position[0] > grid.height/2 and grid.position[1] < grid.width/2:
-			snail2.direction = 3
-			
+			goodsnail.direction = 3
 	def snail2(grid):
 		up, down, right, left = grid.chkMove()
-		if snail2.direction == 0:
-			if grid.position[0] > snail2.mostdown and up: return 0 
+		if goodsnail.direction == 0:
+			if grid.position[0] > goodsnail.mostdown and up: return 0 
 			if down: return 1
 			if right: return 2
-			snail2.direction = 1
-			snail2.mostdown = grid.position[0]
-		elif snail2.direction == 1:
-			if grid.position[1] > snail2.mostright and left: return 3
+			goodsnail.direction = 1
+			goodsnail.mostdown = grid.position[0]
+		elif goodsnail.direction == 1:
+			if grid.position[1] > goodsnail.mostright and left: return 3
 			if right: return 2
 			if up: return 0
-			snail2.direction = 2
-			snail2.mostright = grid.position[1]
-		elif snail2.direction == 2:
-			if grid.position[0] < snail2.mostup and down: return 1
+			goodsnail.direction = 2
+			goodsnail.mostright = grid.position[1]
+		elif goodsnail.direction == 2:
+			if grid.position[0] < goodsnail.mostup and down: return 1
 			if up: return 0
 			if left: return 3
-			snail2.direction = 3
-			snail2.mostup = grid.position[0]
-		elif snail2.direction == 3:
-			if grid.position[1] < snail2.mostleft and right: return 2
+			goodsnail.direction = 3
+			goodsnail.mostup = grid.position[0]
+		elif goodsnail.direction == 3:
+			if grid.position[1] < goodsnail.mostleft and right: return 2
 			if left: return 3
 			if down: return 1
-			snail2.direction = 0
-			snail2.mostleft = grid.position[0]
-		return greed(grid)
-
-def gr1stp(grid):
-	up, down, right, left = grid.chkMove()
-	potScore = [-1, -1, -1, -1]
-	if up:
-		grid.moveUp()
-		potScore[0] = grid.result
-		grid.undoUp()
-	if down: 
-		grid.moveDown()
-		potScore[1] = grid.result
-		grid.undoDown()
-	if right:
-		grid.moveRight()
-		potScore[2] = grid.result
-		grid.undoRight()
-	if left:
-		grid.moveLeft()
-		potScore[3] = grid.result
-		grid.undoLeft()
-	for i, val in enumerate(potScore):
-		if potScore[i]>0:
-			potScore[i] -= grid.result
-	best = max(potScore)
-	return [i for i, val in enumerate(potScore) if val == best][0]
-		
-class deepgreed:
+			goodsnail.direction = 0
+			goodsnail.mostleft = grid.position[0]
+		return first(grid)
+class wiseBFS: # same as deepgreed, but with deep manipulation
 	deep = 1
 	steps = []
-	def preGreed(grid):
-		deepgreed.deep = 6
-	def deepgrd(grid):
-		if len(deepgreed.steps) == 0:
-			deepgreed.steps = deepgreed.bfsPath(grid, deepgreed.deep)[0]
-		move = deepgreed.steps[0]
-		deepgreed.steps = deepgreed.steps[1:] 
+	def setN(grid):
+		wiseBFS.deep = 3
+	def moveN(grid):
+		if len(wiseBFS.steps) == 0:
+			wiseBFS.steps = wiseBFS.bfsPath(grid, wiseBFS.deep)[0]
+		move = wiseBFS.steps[0]
+		wiseBFS.steps = wiseBFS.steps[1:] 
 		score = grid.score()
-		if score > 25:
-			deepgreed.deep = 12
-		elif score > 20:
-			deepgreed.deep = 9
-		elif score > 13:
-			deepgreed.deep = 8
-		elif score > 8:
-			deepgreed.deep = 7
+		if score > 20:
+			wiseBFS.deep = 9
+		elif score > 17:
+			wiseBFS.deep = 7
+		elif score > 12:
+			wiseBFS.deep = 5
+		elif score > 5:
+			wiseBFS.deep = 4
 		return move
 	def bfsPath(grid, deep):
 		if deep == 0:
@@ -151,22 +72,22 @@ class deepgreed:
 			up, down, right, left = [[[],0],[[],0],[[],0],[[],0]]
 			if grid.chkUp():
 				grid.moveUp()
-				up = deepgreed.bfsPath(grid, deep - 1)
+				up = wiseBFS.bfsPath(grid, deep - 1)
 				up[0]    = [0] + up[0]
 				grid.undoUp()
 			if grid.chkDown():
 				grid.moveDown()
-				down = deepgreed.bfsPath(grid, deep - 1)
+				down = wiseBFS.bfsPath(grid, deep - 1)
 				down[0]  = [1] + down[0]
 				grid.undoDown()
 			if grid.chkRight():
 				grid.moveRight()
-				right = deepgreed.bfsPath(grid, deep - 1)
+				right = wiseBFS.bfsPath(grid, deep - 1)
 				right[0] = [2] + right[0]
 				grid.undoRight()
 			if grid.chkLeft():
 				grid.moveLeft()
-				left = deepgreed.bfsPath(grid, deep - 1)
+				left = wiseBFS.bfsPath(grid, deep - 1)
 				left[0]  = [3] + left[0]
 				grid.undoLeft()
 			#print ([up, down, right, left], grid.position)

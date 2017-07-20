@@ -1,5 +1,6 @@
 import math
 from copy import deepcopy
+import time
 class TestYourAI:
 	grids = []
 	results = []
@@ -18,8 +19,9 @@ class TestYourAI:
 		self.results.append([name, avg, minimum, maximum, sd, fails, avg_steps])
 	def testWith(self, method): 
 		results = []
-		grids = deepcopy(self.grids)
-		for grid in grids:
+		grids = deepcopy(self.grids) # quite timespending
+		start = time.time()
+		for idx, grid in enumerate(grids):
 			if method[0] != None: method[0](grid) # for preprocessing
 			steps = 0
 			while(True):
@@ -33,7 +35,9 @@ class TestYourAI:
 					break
 				grid.move(idx)
 			results.append([grid.result*100 / grid.max, steps])
+		end = time.time()
 		self.addToSummary(method[1].__name__, results)
+		return end - start
 	def printResults(self):
 		print("Name\tAvg(%)\tMin(%)\tMax(%)\tStDev\tFail\tAvgSteps")
 		for line in self.results:
