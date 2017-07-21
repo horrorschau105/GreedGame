@@ -26,6 +26,7 @@ for testing all methods declared in **ai.py**
 ### Create
 In **examples.py** there are some functions implementing simply tactics.
 In **ai.py** you can add yours.
+
 In **main.py** 
 ```python
 methods = [[None, random], [None, first], [None, greed], [snail.preSnail, snail.snail]]
@@ -36,13 +37,20 @@ _methods_ contains all names of method to test. If you want to do a preprocessin
 
 Example of result:
 ```
+Finished: random         Used time: 0.099
+Finished: first          Used time: 0.211
+Finished: greed          Used time: 0.335
 Name    Avg(%)  Min(%)  Max(%)  StDev   Fail AvgSteps
 random  2.042   0.308   6.119   1.295   0    34.21
 first   9.572   0.385   24.842  5.585   0    50.33
 greed   2.827   0.366   10.647  1.722   0    31.11
 ```
-Column **Fail** indicates how many times your bot tried to move incorrectly. 
+Column **Fail** indicates how many times your bot tried to move incorrectly.
+Used time should be rather < 1s per grid 
 
 #### Grids
 
-File **grids.txt** contains 500 generated grids. See **generator** branch for more info
+File **grids.txt** contains 500 generated grids. 
+First number in file tells how many grids should be tested. 
+See **generator** branch for more info
+

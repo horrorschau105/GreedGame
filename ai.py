@@ -20,64 +20,17 @@ class snailbfs: # snail at the beginning, bfs ends
 			return move
 		return wiseBFS.moveN(grid)
 			
-class combo:
-#        <-2
-#      3 XX ^
-#      v XX 1
-#        0->
-	direction, mostup, mostdown, mostright, mostleft = 0,0,0,0,0
-	def setDirection(grid):
-		combo.mostup, combo.mostdown, combo.mostright, combo.mostleft = -1, grid.height+1, grid.width+1, -1
-		if grid.position[0] > grid.height/2 and grid.position[1] > grid.width/2:
-			combo.direction = 0
-		if grid.position[0] < grid.height/2 and grid.position[1] < grid.width/2:
-			combo.direction = 2
-		if grid.position[0] < grid.height/2 and grid.position[1] > grid.width/2:
-			combo.direction = 1
-		if grid.position[0] > grid.height/2 and grid.position[1] < grid.width/2:
-			combo.direction = 3
-		wiseBFS.setN(grid)
-	def combo(grid):
-		if grid.score() > 20:
-			return wiseBFS.moveN(grid)
-		up, down, right, left = grid.chkMove()
-		if combo.direction == 0:
-			if grid.position[0] > combo.mostdown and up: return 0 
-			if down: return 1
-			if right: return 2
-			combo.direction = 1
-			combo.mostdown = grid.position[0]
-		elif combo.direction == 1:
-			if grid.position[1] > combo.mostright and left: return 3
-			if right: return 2
-			if up: return 0
-			combo.direction = 2
-			combo.mostright = grid.position[1]
-		elif combo.direction == 2:
-			if grid.position[0] < combo.mostup and down: return 1
-			if up: return 0
-			if left: return 3
-			combo.direction = 3
-			combo.mostup = grid.position[0]
-		elif combo.direction == 3:
-			if grid.position[1] < combo.mostleft and right: return 2
-			if left: return 3
-			if down: return 1
-			combo.direction = 0
-			combo.mostleft = grid.position[0]
-		return first(grid)
+
 class wiseBFS: # same as deepgreed, but with deep manipulation
 	deep = 1
 	steps = []
 	def setN(grid):
-		wiseBFS.deep = 10
+		wiseBFS.deep = 9
 	def moveN(grid):
 		if len(wiseBFS.steps) == 0:
 			wiseBFS.steps = wiseBFS.bfsPath(grid, wiseBFS.deep)[0]
 		move = wiseBFS.steps[0]
 		wiseBFS.steps = wiseBFS.steps[1:] 
-		if grid.score() > 20:
-			wiseBFS.deep = 15
 		return move
 	def bfsPath(grid, deep):
 		if deep == 0:
@@ -104,7 +57,7 @@ class wiseBFS: # same as deepgreed, but with deep manipulation
 				left = wiseBFS.bfsPath(grid, deep - 1)
 				left[0]  = [3] + left[0]
 				grid.undoLeft()
-			return [[mv, res + grid.result] for mv, res in [up, down, right, left] if 	res == max([tup[1] for tup in [up, down, right	, left]])][0]
+			return [[mv, res + grid.result] for mv, res in [up, down, right, left] if 	res == max([tup[1] for tup in [up, down, right, left]])][0]
 class boostedsnail:
 #        <-2
 #      3 XX ^
@@ -114,7 +67,7 @@ class boostedsnail:
 	def setDirection(grid):
 		boostedsnail.mostup, boostedsnail.mostdown, boostedsnail.mostright, boostedsnail.mostleft = -1, grid.height+1, grid.width+1, -1
 		distup, distdown, distright, distleft = grid.position[0], grid.height - grid.position[0], grid.width - grid.position[1], grid.position[1]
-		distances = [distup, distdown, distright, distleft]
+		distances = [distup, distdown, distright, distleft] # dists from grids bound
 		if distup == min(distances):
 			boostedsnail.direction = 2
 		if distdown == min(distances):
@@ -123,10 +76,7 @@ class boostedsnail:
 			boostedsnail.direction = 1
 		if distleft == min(distances):
 			boostedsnail.direction = 3
-		#wiseBFS.setN(grid)
 	def Bsnail(grid):
-		#if grid.score() > 10:
-		#	return wiseBFS.moveN(grid)
 		up, down, right, left = grid.chkMove()
 		if boostedsnail.direction == 0:
 			if grid.position[0] > boostedsnail.mostdown and up: return 0 
