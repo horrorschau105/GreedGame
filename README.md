@@ -16,5 +16,9 @@ Numbers around your position say how far you have to move in corresponding direc
 You can't go through one cell more than once. Possible moves are shown at the bottom.
 
 ### Highscores
+Highscores are stored in _highscores.xd_ in very simple way.
 
-Highscores are stored in _highscores.xd_ in very simple way
+### Other branches
+
+**generator** - contains generator for random grids.
+**ai** - some implementations of simple bots playing GreedGame. Actually best reached results are in average 29%
