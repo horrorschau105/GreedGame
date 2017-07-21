@@ -2,19 +2,12 @@
 from grid import Grid
 from random import randint
 def random(grid):
-	data = [[]]
-	data[0] = grid.chkMove() #temporal patch
-	choices = [i for i, val in enumerate(data[0]) if val]
+	choices = [i for i, val in enumerate(grid.chkMove()) if val]
 	return choices[randint(0,len(choices)-1)]
 def greed(grid):
-	data = [[], [], [], []]
-	data[3] = grid.potScore()
-	best = max(data[3])
-	return [i for i, val in enumerate(data[3]) if val == best][0]
+	return [i for i, val in enumerate(grid.potScore()) if val == max(grid.potScore())][0]
 def first(grid):
-	data = [[], []]
-	data[0] = grid.chkMove()
-	return [i for i,val in enumerate(data[0]) if val][0]
+	return [i for i,val in enumerate(grid.chkMove()) if val][0]
 class snail:
 # classic snail 
 #         <- 2

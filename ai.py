@@ -1,6 +1,25 @@
 from grid import Grid
 from examples import first
 #here you can put any ai method with additional classes 
+class snailbfs: # snail at the beginning, bfs ends
+	moves = []
+	def pre(grid):
+		snailbfs.moves = []
+		boostedsnail.setDirection(grid)
+		wiseBFS.setN(grid)
+		while(any(grid.chkMove())):
+			m = boostedsnail.Bsnail(grid)
+			snailbfs.moves.append(m)
+			[grid.moveUp, grid.moveDown, grid.moveRight, grid.moveLeft][m]()
+		for i in snailbfs.moves[::-1]:
+			[grid.undoUp, grid.undoDown, grid.undoRight, grid.undoLeft][i]()
+		snailbfs.moves = snailbfs.moves[:-5] # arbitrary
+	def Gsnail(grid):
+		if len(snailbfs.moves) > 0:
+			move, snailbfs.moves = snailbfs.moves[0], snailbfs.moves[1:]
+			return move
+		return wiseBFS.moveN(grid)
+			
 class combo:
 #        <-2
 #      3 XX ^
@@ -51,18 +70,20 @@ class wiseBFS: # same as deepgreed, but with deep manipulation
 	deep = 1
 	steps = []
 	def setN(grid):
-		wiseBFS.deep = 5
+		wiseBFS.deep = 10
 	def moveN(grid):
 		if len(wiseBFS.steps) == 0:
 			wiseBFS.steps = wiseBFS.bfsPath(grid, wiseBFS.deep)[0]
 		move = wiseBFS.steps[0]
 		wiseBFS.steps = wiseBFS.steps[1:] 
+		if grid.score() > 20:
+			wiseBFS.deep = 15
 		return move
 	def bfsPath(grid, deep):
 		if deep == 0:
 			return [[], grid.result]
 		else:
-			up, down, right, left = [[[],0],[[],0],[[],0],[[],0]]
+			up, down, right, left = [[[],-1000],[[],-1000],[[],-1000],[[],-1000]]
 			if grid.chkUp():
 				grid.moveUp()
 				up = wiseBFS.bfsPath(grid, deep - 1)
@@ -102,7 +123,10 @@ class boostedsnail:
 			boostedsnail.direction = 1
 		if distleft == min(distances):
 			boostedsnail.direction = 3
+		#wiseBFS.setN(grid)
 	def Bsnail(grid):
+		#if grid.score() > 10:
+		#	return wiseBFS.moveN(grid)
 		up, down, right, left = grid.chkMove()
 		if boostedsnail.direction == 0:
 			if grid.position[0] > boostedsnail.mostdown and up: return 0 
